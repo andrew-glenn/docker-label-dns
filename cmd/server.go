@@ -9,7 +9,6 @@ import (
 
 	"github.com/andrew-glenn/docker-compose-dns/dnssrv"
 	"github.com/andrew-glenn/docker-compose-dns/dockerSocket"
-	"github.com/docker/docker/client"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -29,7 +28,7 @@ var serverCmd = &cobra.Command{
 		// Start the DNS server
 		go dnssrv.Start(viper.GetString("interface"), viper.GetInt("port"), viper.GetString("suffix"), req)
 
-		dockerSocket.Start(client.FromEnv(), dnssrv.DNSDatabase)
+		dockerSocket.Start("unix:///var/run/docker.sock", dnssrv.DNSDatabase)
 
 		// Start the Docker socket listener / introspector.
 
