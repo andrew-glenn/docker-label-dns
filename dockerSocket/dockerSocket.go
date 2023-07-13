@@ -62,13 +62,15 @@ func (s *Spy) registerRunningContainers() {
 
 func (s *Spy) registerRecordsForContainer(container *dockerApi.Container) {
 	for _, fqdn := range s.relevantContainerLabels(container) {
-		log.Printf("Registering: %s with IP: %s", fqdn, container.NetworkSettings.IPAddress)
-		ip, _, err := net.ParseCIDR(container.NetworkSettings.IPAddress + "/32")
-		if err != nil {
-			log.Fatalf("unable to parse IP address: %v", err)
-		}
-		s.dns[fqdn+"."] = types.Records{
-			A: []net.IP{ip},
+		for _, network := range container.NetworkSettings.Networks {
+			log.Printf("Registering: %s with IP: %s", fqdn, container.NetworkSettings.IPAddress)
+			ip, _, err := net.ParseCIDR(network.IPAddress + "/32")
+			if err != nil {
+				log.Fatalf("unable to parse IP address: %v", err)
+			}
+			s.dns[fqdn+"."] = types.Records{
+				A: []net.IP{ip},
+			}
 		}
 	}
 }
