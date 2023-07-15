@@ -111,7 +111,9 @@ func (s *Spy) mutateContainerInCache(id string, status string) {
 	}
 
 	var running = regexp.MustCompile("start|^Up.*$")
-	var stopping = regexp.MustCompile("die")
+	var stopping = regexp.MustCompile("die|kill")
+
+	log.Printf("Status: %s", status)
 
 	switch {
 	case running.MatchString(status):

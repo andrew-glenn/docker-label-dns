@@ -17,11 +17,7 @@ import (
 
 // serverCmd represents the server command
 var serverCmd = &cobra.Command{
-	Use:   "server",
-	Short: "Run ztDNS server",
-	Long: `Server (ztdns server) will start the DNS server.append
-	
-	Example: ztdns server`,
+	Use: "server",
 	Run: func(cmd *cobra.Command, args []string) {
 		// Update the DNSDatabase
 		req := make(chan string)
